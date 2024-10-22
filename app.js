@@ -131,6 +131,13 @@ app.get("/test-ejs", (req, res) => {
   }
 });
 
+// search form - from navbar
+app.get("/search", (req, res) => {
+  res.render("searchform.ejs", { 
+    layout: 'layout',
+    title: 'Search Artworks by Keyword'
+  });
+});
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
