@@ -4,12 +4,12 @@
 
 <h1>Search Results</h1>
 
+<p>Keyword: <%= capitalizedKeyword %></p>
+<img src="<%= image %>" alt="Artwork from search" width="500px">
+<p>Title: <%= title %></p>
+<p>Artist: <%= artist %></p>
+
 <form action="/searchByKeyword" method="GET">
     <input type="hidden" name="q" value="<%= capitalizedKeyword %>">
     <button type="submit"><h3>Search "<%= capitalizedKeyword %>" again</h3></button>
 </form>
-
-<p>Keyword: <%= capitalizedKeyword %></p>
-<p>Title: <%= title %></p>
-<p>Artist: <%= artist %></p>
-<img src="<%= image %>" alt="Artwork from search" width="500px">
