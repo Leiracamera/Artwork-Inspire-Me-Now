@@ -1,4 +1,12 @@
+
+<% if (locals.errorMessage) { %>
+<div class="error-message">
+    <p><%= errorMessage %></p>
+</div>
+
+<% } else { %>
 <h1>Random Artwork</h1>
 <p>Title: <%= title %></p>
 <p>Artist: <%= artist %></p>
 <img src="<%= image %>" alt="Random Artwork" width="500px">
+<% } %>

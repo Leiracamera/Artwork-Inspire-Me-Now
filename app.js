@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // HOME PAGE
 app.get("/", (req, res) => {
-  console.log("Rendering index.ejs with layout");
+  console.log("homepage loading");
   res.render("index", {   
     title: "Artwork Inspire Me"
   });
@@ -30,6 +30,7 @@ app.get("/test-ejs", (req, res) => {
 
 // RANDOM image search request
   app.get("/random", async (req, res) => {
+    console.log("/random page loading");
     try {
       // Generate a random objectID
       const randomObjectId = Math.floor(Math.random() * 500000) + 1;
@@ -61,13 +62,15 @@ app.get("/test-ejs", (req, res) => {
         res.redirect("/random");
       }
     } catch (error) {
-      // Handle any errors gracefully
-      res.render("index.ejs", {
+      console.log("Error fetching random artwork:", error.message);
+      // Render the random page with an error message
+      res.render("random.ejs", {
         layout: 'layout',
         title: "Error",
         artist: "Unknown Artist",
         year: "Unknown Year",
-        image: null
+        image: null,
+        errorMessage: "Sorry, we couldn't fetch the artwork. Please try again!"
       });
     }
   });
