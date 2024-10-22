@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artwork Inspire Me</title>
-</head>
-<body>
+<h1>Search for an Artwork</h1>
+<form action="/searchByKeyword" method="GET">
+  <label for="keyword">Enter a keyword (e.g., flowers, abstract, modern):</label>
+  <input type="text" id="keyword" name="q" required>
+  <button type="submit">Search</button>
+</form>
 
-  <!-- Artwork title, artist, and image display -->
-  <h1><%= title %></h1>
-  <p>By: <%= artist %> (Created: <%= year %>)</p>
-  <img src="<%= image %>" alt="<%= title %>" style="max-width: 500px;">
-
-</body>
-</html>
+<h2>Or...</h2>
+<form action="/random" method="GET">
+  <button type="submit">Get a Random Artwork</button>
+</form>

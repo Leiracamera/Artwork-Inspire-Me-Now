@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px; /* Controls the base font size for the whole document */
+    scroll-behavior: smooth; /* Smooth scrolling */
+  }
+  
+  body {
+    font-family: Arial, sans-serif; /* Or another font */
+    line-height: 1.6; /* Improve readability */
+    background-color: #ebe7e7; /* Light background color */
+    color: #333; /* Default text color */
+  }
+
+  header, main, footer {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
