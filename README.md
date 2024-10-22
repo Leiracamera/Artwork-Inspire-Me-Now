@@ -8,3 +8,11 @@ OBJECTIVES:
 - Gain practical experience using Express/Node.js for server-side programming.
 - Enhance understanding of client-server communication using Axios.
 - Demonstrate ability to manipulate, present, and work with data retrieved from APIs.
+
+
+
+
+NOTES TODO: 
+- add option when searching by keyword to get more artworks by same keyword, i.e. search again with "blue", or "more artworks..."
+- check the error paths for search artworks
+- Add CSS for entire site

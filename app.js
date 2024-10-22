@@ -100,6 +100,7 @@ app.get("/test-ejs", (req, res) => {
       }
 
       if (validArtworkFound) {
+          console.log("Valid artwork found, rendering searchbykeyword.ejs"); // debugging log
           res.render("searchbykeyword.ejs", {
           layout: 'layout',
           keyword: keyword,
@@ -109,24 +110,27 @@ app.get("/test-ejs", (req, res) => {
           image: artwork.primaryImage || null
         });
       } else {
-        res.render("index", {
+        console.log("No artworks with that keyword **with an image found - rendering home page index.ejs"); // debug log
+        res.render("searchform.ejs", {
           layout: 'layout',
-          title: "No Results",
-          content: "No artworks with images found for this keyword."
+          title: "Error",
+          errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
         });
       }
     } else {
-      res.render("index", {
+        console.log("Error fetching artwork with that keyword:", error.message);      
+        res.render("searchform.ejs", {
         layout: 'layout',
-        title: "No Results",
-        content: "No artworks found for this keyword."
+        title: "Error",
+        errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
       });
     }
   } catch (error) {
-    res.render("index", {
+    console.log("General error (catch) - rendering home page index.ejs", error.message); // debug log
+    res.render("searchform.ejs", {
       layout: 'layout',
       title: "Error",
-      content: "Error fetching artwork, please try again."
+      errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
     });
   }
 });

@@ -1,6 +1,20 @@
-<h1>Search for an Artwork</h1>
-<form action="/searchByKeyword" method="GET">
-  <label for="keyword">Enter a keyword (e.g., flowers, abstract, modern):</label>
-  <input type="text" id="keyword" name="q" required>
-  <button type="submit">Search</button>
-</form>
+
+<% if (locals.errorMessage) { %>
+    <div class="error-message">
+        <h1><%= errorMessage %></h1>
+        <h2>Search for an Artwork</h2>
+        <form action="/searchByKeyword" method="GET">
+        <label for="keyword">Enter a keyword (e.g., flowers, abstract, modern):</label>
+        <input type="text" id="keyword" name="q" required>
+        <button type="submit">Search</button>
+        </form>
+    </div>
+    
+    <% } else { %>
+        <h1>Search for an Artwork</h1>
+        <form action="/searchByKeyword" method="GET">
+        <label for="keyword">Enter a keyword (e.g., flowers, abstract, modern):</label>
+        <input type="text" id="keyword" name="q" required>
+        <button type="submit">Search</button>
+        </form>
+        <% } %>
