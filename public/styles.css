@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Ensure padding is included in width calculations */
+  box-sizing: border-box; 
 }
 
 body {  
@@ -220,7 +220,7 @@ button:active, .btn:active {
   }
 
   header h1 {
-    font-size: 2rem; /* Smaller font size for mobile phones */
+    font-size: 2rem; 
   }
 
   footer {
