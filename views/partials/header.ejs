@@ -1,8 +1,16 @@
 <header>
     <h1>ARTWORK INSPIRE ME NOW</h1>
-    <nav>
+    <nav class="navbar">
       <a href="/">Home</a>
       <a href="/random">Random Artwork</a>
       <a href="/search">Search Artworks</a>
     </nav>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
   </header>
+
+  <script>
+    function toggleMenu() {
+      const navbar = document.querySelector('.navbar');
+      navbar.classList.toggle('active');
+    }
+  </script>
