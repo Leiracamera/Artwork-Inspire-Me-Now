@@ -4,7 +4,7 @@ import bodyParser from "body-parser"
 import expressEjsLayouts from "express-ejs-layouts";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const API_URL = "https://collectionapi.metmuseum.org/public/collection/v1"
 
 app.set('view engine', 'ejs');
