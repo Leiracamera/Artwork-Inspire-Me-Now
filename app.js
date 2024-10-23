@@ -23,54 +23,49 @@ app.get("/", (req, res) => {
 });
 
 
-//Test 
-app.get("/test-ejs", (req, res) => {
-  res.render("test");
-});
-
 // RANDOM image search request
   app.get("/random", async (req, res) => {
     console.log("/random page loading");
-    try {
-      // Generate a random objectID
-      const randomObjectId = Math.floor(Math.random() * 500000) + 1;
-      const response = await axios.get(`${API_URL}/objects/${randomObjectId}`);
-  
-      if (response && response.data) {
-        const artwork = response.data;
-  
-        // Fallback values for title, artist, and year in case they are undefined
-        const title = artwork.title || "Unknown Title";
-        const artist = artwork.artistDisplayName || "Unknown Artist";
-        const year = artwork.objectDate || "Unknown Year";
-  
-        // If the artwork has an image, render the page
-        if (artwork.primaryImage) {
-          res.render("random.ejs", {
-            layout: 'layout',
-            title: title,
-            artist: artist,
-            year: year,
-            image: artwork.primaryImage
-          });
-        } else {
-          // If no image, try another artwork
-          res.redirect("/random");
-        }
-      } else {
-        // If no valid data is found, try another artwork
-        res.redirect("/random");
+
+    let retryAttempts = 5;
+    let artwork;
+    let validArtworkFound = false;
+
+    while (retryAttempts > 0 && !validArtworkFound) {
+      try {
+        const randomObjectId = Math.floor(Math.random() * 500000) + 1;
+        const response = await axios.get(`${API_URL}/objects/${randomObjectId}`);
+
+        if (response && response.data) {
+          artwork = response.data;
+
+          if (artwork.primaryImage) {
+            validArtworkFound = true;
+          }
       }
     } catch (error) {
       console.log("Error fetching random artwork:", error.message);
-      // Render the random page with an error message
+    }
+
+    retryAttempts--;
+  }
+
+  if (validArtworkFound) {
+    res.render("random.ejs", {
+      layout: 'layout',
+      title: artwork.title || "Unknown Title", 
+      artist: artwork.artistDisplayName || "Unknown Artist", 
+      year: artwork.objectDate || "Unknown Year",
+      image: artwork.primaryImage
+    }); 
+    } else {
       res.render("random.ejs", {
         layout: 'layout',
         title: "Error",
         artist: "Unknown Artist",
         year: "Unknown Year",
         image: null,
-        errorMessage: "Sorry, we couldn't fetch the artwork. Please try again!"
+        errorMessage: "Sorry, we couldn't fetch an artwork after multiple attempts. Please try again!"
       });
     }
   });
@@ -81,59 +76,63 @@ app.get("/test-ejs", (req, res) => {
       const keyword = req.query.q;
       const searchResponse = await axios.get(`${API_URL}/search?q=${keyword}`);
       const objectIDs = searchResponse.data.objectIDs;
-
-      if (objectIDs && objectIDs.length > 0 ) {
+  
+      if (objectIDs && objectIDs.length > 0) {
         let validArtworkFound = false;
+        let retryAttempts = 5; // Retry limit
         let artwork; 
-
-        while (!validArtworkFound && objectIDs.length > 0) {
+  
+        // Retry logic
+        while (retryAttempts > 0 && !validArtworkFound && objectIDs.length > 0) {
           const randomIndex = Math.floor(Math.random() * objectIDs.length);
           const randomObjectId = objectIDs[randomIndex];
           const artworkResponse = await axios.get(`${API_URL}/objects/${randomObjectId}`);
           artwork = artworkResponse.data;
-
-        if (artwork.primaryImage) {
-          validArtworkFound = true;
-        } else {
-          objectIDs.splice(randomIndex, 1);
+  
+          if (artwork.primaryImage) {
+            validArtworkFound = true;
+          } else {
+            objectIDs.splice(randomIndex, 1); // Remove invalid objectID
+          }
+  
+          retryAttempts--; // Decrease the retry attempts
         }
-      }
-
-      if (validArtworkFound) {
-          console.log("Valid artwork found, rendering searchbykeyword.ejs"); // debugging log
+  
+        if (validArtworkFound) {
+          console.log("Valid artwork found, rendering searchbykeyword.ejs"); // debug log
           res.render("searchbykeyword.ejs", {
-          layout: 'layout',
-          keyword: keyword,
-          title: artwork.title || "Unknown Title",
-          artist: artwork.artistDisplayName || "Unknown Artist",
-          year: artwork.objectDate || "Unknown Year",
-          image: artwork.primaryImage || null
-        });
+            layout: 'layout',
+            keyword: keyword,
+            title: artwork.title || "Unknown Title",
+            artist: artwork.artistDisplayName || "Unknown Artist",
+            year: artwork.objectDate || "Unknown Year",
+            image: artwork.primaryImage || null
+          });
+        } else {
+          console.log("No valid artworks with images found, rendering searchform.ejs"); // debug log
+          res.render("searchform.ejs", {
+            layout: 'layout',
+            title: "Error",
+            errorMessage: "Sorry, we couldn't fetch any artworks with an image. Please try again with a different keyword!"
+          });
+        }
       } else {
-        console.log("No artworks with that keyword **with an image found - rendering home page index.ejs"); // debug log
+        console.log("No artworks found for keyword:", keyword);
         res.render("searchform.ejs", {
           layout: 'layout',
           title: "Error",
-          errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
+          errorMessage: "No artworks found for the keyword. Please try a different keyword!"
         });
       }
-    } else {
-        console.log("Error fetching artwork with that keyword:", error.message);      
-        res.render("searchform.ejs", {
+    } catch (error) {
+      console.log("General error (catch) during search:", error.message);
+      res.render("searchform.ejs", {
         layout: 'layout',
         title: "Error",
-        errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
+        errorMessage: "Sorry, we couldn't fetch any artworks. Please try again later!"
       });
     }
-  } catch (error) {
-    console.log("General error (catch) - rendering home page index.ejs", error.message); // debug log
-    res.render("searchform.ejs", {
-      layout: 'layout',
-      title: "Error",
-      errorMessage: "Sorry, we couldn't fetch any artworks. Please try again with a different keyword!"
-    });
-  }
-});
+  });
 
 // search form - from navbar
 app.get("/search", (req, res) => {
