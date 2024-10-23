@@ -13,6 +13,7 @@ header {
   background-color: #423F3E;
   color: whitesmoke;
   padding: 1rem;
+  padding-bottom: 40px;
 }
 
 header a {
@@ -21,7 +22,11 @@ header a {
   padding: 7px;
   background-color: bisque;
   border-radius: 5px;
+  margin-right: 10px;
+}
 
+header a:last-child {
+  margin-right: 0;
 }
 
 header nav a:hover {
@@ -43,4 +48,9 @@ footer {
   background-color: #2B2B2B;
   color: whitesmoke;
   padding: 1rem;
+}
+
+img {
+  border: 10px solid #423F3E;
+  padding: 30px 20px 30px 20px;
 }
