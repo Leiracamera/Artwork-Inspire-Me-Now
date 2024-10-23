@@ -141,7 +141,7 @@ button:hover, .btn:hover {
 }
 
 button:active, .btn:active {
-  transform: scale(0.98); /
+  transform: scale(0.98); 
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); 
 }
 
